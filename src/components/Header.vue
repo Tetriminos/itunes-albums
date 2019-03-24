@@ -2,7 +2,7 @@
   <header>
     <div class="header-content">
       <div class="title">
-        <h1>Album list</h1>
+        <h1 @click="reloadPage">Album list</h1>
         <p>Top 100</p>
       </div>
       <input class="search" type="text" placeholder="Search" :value="search" @input="$emit('update:search', $event.target.value)">
@@ -15,6 +15,11 @@
     name: "Header",
     props: {
       search: String
+    },
+    methods: {
+      reloadPage(){
+        window.location.reload()
+      }
     }
   }
 </script>
@@ -28,7 +33,7 @@
 
   .header-content {
     max-width: $max-content-width;
-      margin: 0 auto;
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
   }
@@ -59,6 +64,7 @@
       line-height: normal;
       letter-spacing: -0.9px;
       color: $blackish;
+      cursor: pointer;
     }
 
     p {

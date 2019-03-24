@@ -1,10 +1,15 @@
 <template>
   <div class="albums">
     <div class="filters">
-      <p class="all">All</p>
-      <p class="featured">Featured</p>
+      <p :class="{ filterFeatured: filterFeatured }" @click="toggleFilterFeatured">All</p>
+      <p :class="{ filterFeatured: !filterFeatured }" @click="toggleFilterFeatured">Featured</p>
     </div>
-    <Album class="album" v-for="album in filteredAlbums" v-bind:key="album.id.attributes['im:id']" :data="album"/>
+    <div v-if="filteredAlbums.length === 0">
+      <p>No albums matching the criteria.</p>
+    </div>
+    <div v-else>
+      <Album class="album" v-for="album in filteredAlbums" v-bind:key="album.id" :album="album"/>
+    </div>
   </div>
 </template>
 
@@ -12,6 +17,7 @@
   import Album from './Album/Album.vue';
 
   import itunesdata from './../assets/itunesdata.json';
+  import {mapAlbumData} from './../utils/mapAlbumData';
 
   export default {
     name: "AlbumList",
@@ -25,15 +31,25 @@
     data() {
       return {
         albums: [],
-        filteredAlbums: []
+        filteredAlbums: [],
+        filterFeatured: false
       }
     },
     watch: {
-      search: function(search) {
-          this.filteredAlbums = this.albums.filter(album => {
-            return album["im:artist"].label.toLowerCase().includes(search.toLowerCase())
-              || album["im:name"].label.toLowerCase().includes(search.toLowerCase());
+      search: function (search) {
+        this.filteredAlbums = this.albums.filter(album => {
+          return album.artist.name.toLowerCase().includes(search.toLowerCase())
+            || album.name.toLowerCase().includes(search.toLowerCase());
+        });
+      },
+      filterFeatured: function (filter) {
+        if (filter === true) {
+          this.filteredAlbums = this.filteredAlbums.filter(album => {
+            return localStorage.getItem(album.id) === 'true';
           });
+        } else if (filter === false) {
+          this.filteredAlbums = JSON.parse(JSON.stringify(this.albums));
+        }
       }
     },
     mounted() {
@@ -41,8 +57,11 @@
     },
     methods: {
       fetchAlbums() {
-        this.albums = itunesdata.feed.entry;
+        this.albums = mapAlbumData(itunesdata);
         this.filteredAlbums = JSON.parse(JSON.stringify(this.albums))
+      },
+      toggleFilterFeatured() {
+        this.filterFeatured = !this.filterFeatured;
       }
     }
   }
@@ -61,24 +80,20 @@
     margin: 52px auto 30px auto;
     display: flex;
     flex-direction: row;
+
+    p {
+      margin-right: 48px;
+      font-size: 16px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.25;
+      letter-spacing: -0.6px;
+      cursor: pointer;
+    }
   }
 
-  .filters > p {
-    margin-right: 48px;
-    font-size: 16px;
-    font-weight: normal;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: 1.25;
-    letter-spacing: -0.6px;
-  }
-
-  // TODO
-  .all {
-    color: $pinkish-gray;
-  }
-
-  .featured {
+  .filterFeatured {
     color: $turquoise-blue;
   }
 </style>

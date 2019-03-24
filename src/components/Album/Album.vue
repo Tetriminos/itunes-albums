@@ -1,21 +1,22 @@
 <template>
   <div>
     <div class="card" @click="showAlbumModal">
-      <img :src="data['im:image'][2].label" alt="Album cover">
+      <img :src="album.images.big" alt="Album cover">
       <div class="container">
-        <p class="title">{{ data['im:name'].label }}</p>
-        <p class="artist">{{ data['im:artist'].label.toUpperCase() }}</p>
+        <p class="title">{{ album.name }}</p>
+        <p class="artist">{{ album.artist.name.toUpperCase() }}</p>
       </div>
       <div class="filler"></div>
       <div class="featured-badge">
-        <p v-if="featured">FEATURED</p>
-        <p v-if="!featured">Add to featured</p>
+        <p v-if="featured" class="is-featured" @click.stop="removeFromFeatured">FEATURED</p>
+        <p v-if="!featured" class="not-featured" @click.stop="addToFeatured">Add to featured</p>
       </div>
 
       <AlbumModal
           v-if="isAlbumModalVisible"
           @close="closeAlbumModal"
-          :data="data"
+          :album="album"
+          :featured="featured"
       />
     </div>
   </div>
@@ -30,11 +31,11 @@
       AlbumModal
     },
     props: {
-      data: Object
+      album: Object
     },
     data() {
       return {
-        featured: true,
+        featured: this.isFeatured(),
         isAlbumModalVisible: false
       }
     },
@@ -44,6 +45,23 @@
       },
       closeAlbumModal() {
         this.isAlbumModalVisible = false;
+      },
+      isFeatured: function () {
+        const isFeatured = localStorage.getItem(this.album.id);
+        if (isFeatured === null || isFeatured === undefined) {
+          localStorage.setItem(this.album.id, 'false');
+          return false;
+        }
+
+        return isFeatured === 'true';
+      },
+      addToFeatured() {
+        localStorage.setItem(this.album.id, 'true');
+        this.featured = true;
+      },
+      removeFromFeatured() {
+        localStorage.removeItem(this.album.id);
+        this.featured = false;
       }
     }
   }
@@ -57,6 +75,7 @@
     background-color: #ffffff;
     display: flex;
     align-items: left;
+    cursor: pointer;
   }
 
   /* On mouse-over, add a deeper shadow */
@@ -107,22 +126,51 @@
   }
 
   .featured-badge {
-    width: 83px;
-    height: 25px;
-    border-radius: 3px;
-    background-color: #13d6ea;
     margin: 32px 21px 33px 0;
-  }
+    /*padding: 7px 0;*/
 
-  .featured-badge > p {
-    font-size: 10px;
-    font-weight: bold;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    color: #ffffff;
-    text-align: center;
-    padding: 7px 0;
+    .is-featured {
+      width: 83px;
+      height: 13px;
+      border-radius: 3px;
+      background-color: $aqua;
+      font-family: WorkSans-Bold, sans-serif;
+      font-size: 10px;
+      font-weight: bold;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      color: white;
+      text-align: center;
+      padding: 7px 0;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $grayish-brown;
+
+        &:after {
+          content: ' X';
+        }
+      }
+    }
+
+    .not-featured {
+      font-family: WorkSans-Regular, sans-serif;
+      font-size: 10px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      text-decoration: underline;
+      letter-spacing: normal;
+      color: $aqua;
+      padding: 7px;
+      cursor: pointer;
+
+      &:hover{
+        color: $grayish-brown;
+      }
+    }
   }
 </style>

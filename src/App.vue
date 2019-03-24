@@ -28,11 +28,16 @@ export default {
     margin: 0;
   }
 
+  body, html {
+    height: 100%;
+  }
+
   #app {
     font-family: WorkSans-Regular, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background: $muted-white;
+    min-height: 100%;
   }
 
   .album-list {
