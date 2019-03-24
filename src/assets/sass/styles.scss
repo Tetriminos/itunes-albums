@@ -1,0 +1,35 @@
+// heights and widths
+$max-content-width: 1080px;
+$min-content-width: 640px;
+$header-height: 100px;
+
+// colors
+$muted-white: #f9f9f9;
+$aqua: #13d6ea;
+$blackish: #363636;
+$blackish-80-percent: rgba(36, 36, 36, 0.8);
+$blackish-47-percent: rgba(36, 36, 36, 0.47);
+$muted-black: #282828;
+$pinkish-gray: #cfcfcf;
+$turquoise-blue: #00accf;
+$warm-gray: #828282;
+$grayish: #a6a6a6;
+$grayish-brown: #545454;
+$grayish-brown-60-percent: rgba(54, 54, 54, 0.6);
+$shadow: #e7e7e7;
+
+// fonts
+@font-face {
+  font-family: 'WorkSans-Medium';
+  src: url('~@/assets/fonts/WorkSans-Medium.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'WorkSans-Bold';
+  src: url('~@/assets/fonts/WorkSans-Bold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'WorkSans-Regular';
+  src: url('~@/assets/fonts/WorkSans-Regular.otf') format('opentype');
+}

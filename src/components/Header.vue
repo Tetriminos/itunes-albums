@@ -1,0 +1,75 @@
+<template>
+  <header>
+    <div class="header-content">
+      <div class="title">
+        <h1>Album list</h1>
+        <p>Top 100</p>
+      </div>
+      <input class="search" type="text" placeholder="Search" :value="search" @input="$emit('update:search', $event.target.value)">
+    </div>
+  </header>
+</template>
+
+<script>
+  export default {
+    name: "Header",
+    props: {
+      search: String
+    }
+  }
+</script>
+
+<style scoped lang="scss">
+  header {
+    height: $header-height;
+    box-shadow: 0 1px 4px 0 $shadow;
+    background-color: white;
+  }
+
+  .header-content {
+    max-width: $max-content-width;
+      margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .search {
+    width: 370px;
+    height: 16px;
+    border: 0;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    margin: 40px 0 20px 0;
+    padding: 11px 20px 13px 30px;
+    color: $warm-gray;
+    background: url('../assets/search.svg') no-repeat right;
+    background-origin: content-box;
+  }
+
+  .title {
+    padding-top: 35px;
+    text-align: left;
+
+    h1 {
+      font-family: WorkSans-Medium, sans-serif;
+      font-size: 24px;
+      font-weight: 500;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: -0.9px;
+      color: $blackish;
+    }
+
+    p {
+      font-family: WorkSans-Regular, sans-serif;
+      font-size: 11px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: -0.4px;
+      color: $warm-gray;
+    }
+  }
+</style>

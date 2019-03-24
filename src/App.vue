@@ -1,28 +1,41 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Header :search.sync="search"></Header>
+    <AlbumList class="album-list" :number-of-albums="100" :search.sync="search"></AlbumList>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Header from './components/Header.vue';
+import AlbumList from './components/AlbumList.vue';
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    Header: Header,
+    AlbumList: AlbumList
+  },
+  data() {
+    return {
+      search: ''
+    }
   }
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="scss">
+  * {
+    margin: 0;
+  }
+
+  #app {
+    font-family: WorkSans-Regular, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: $muted-white;
+  }
+
+  .album-list {
+    margin: 0 auto;
+  }
 </style>
