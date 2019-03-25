@@ -17,7 +17,7 @@
   import Album from './Album/Album.vue';
 
   import itunesdata from './../assets/itunesdata.json';
-  import {mapAlbumData} from './../utils/mapAlbumData';
+  import { mapAlbumData, EventBus } from './../utils';
 
   export default {
     name: "AlbumList",
@@ -25,35 +25,42 @@
       Album
     },
     props: {
-      numberOfAlbums: Number,
-      search: String
+      numberOfAlbums: Number
     },
     data() {
       return {
         albums: [],
         filteredAlbums: [],
-        filterFeatured: false
+        filterFeatured: false,
+        search: ''
       }
     },
     watch: {
       search: function (search) {
-        this.filteredAlbums = this.albums.filter(album => {
-          return album.artist.name.toLowerCase().includes(search.toLowerCase())
-            || album.name.toLowerCase().includes(search.toLowerCase());
-        });
+        this.filteredAlbums = this.albums
+          .filter(this.matchesSearchTerm(search))
+          .filter(this.isFeatured);
       },
-      filterFeatured: function (filter) {
-        if (filter === true) {
-          this.filteredAlbums = this.filteredAlbums.filter(album => {
-            return localStorage.getItem(album.id) === 'true';
-          });
-        } else if (filter === false) {
-          this.filteredAlbums = JSON.parse(JSON.stringify(this.albums));
-        }
+      filterFeatured: function () {
+        this.filteredAlbums = this.filteredAlbums.filter(this.isFeatured);
       }
     },
     mounted() {
       this.fetchAlbums();
+      EventBus.$on('search', search => {
+        this.search = search;
+      });
+      EventBus.$on('removedFromFavorites', id => {
+        // remove the item from filtered albums shown in the view if it
+        // gets removed.
+        this.filteredAlbums = this.filteredAlbums.filter(album => {
+          if (album.id === id && this.filterFeatured === true) {
+            return false;
+          }
+
+          return true;
+        });
+      });
     },
     methods: {
       fetchAlbums() {
@@ -62,6 +69,19 @@
       },
       toggleFilterFeatured() {
         this.filterFeatured = !this.filterFeatured;
+      },
+      matchesSearchTerm(search) {
+        return function(album) {
+          return album.artist.name.toLowerCase().includes(search.toLowerCase())
+              || album.name.toLowerCase().includes(search.toLowerCase());
+        }
+      },
+      isFeatured(album) {
+        if (this.filterFeatured === true) {
+          return localStorage.getItem(album.id) === 'true';
+        } else {
+          return true;
+        }
       }
     }
   }
@@ -85,8 +105,6 @@
       margin-right: 48px;
       font-size: 16px;
       font-weight: normal;
-      font-style: normal;
-      font-stretch: normal;
       line-height: 1.25;
       letter-spacing: -0.6px;
       cursor: pointer;
@@ -95,5 +113,11 @@
 
   .filterFeatured {
     color: $turquoise-blue;
+  }
+
+  @media (max-width: 1150px) {
+    .albums {
+      margin: 0 30px;
+    }
   }
 </style>

@@ -5,20 +5,27 @@
         <h1 @click="reloadPage">Album list</h1>
         <p>Top 100</p>
       </div>
-      <input class="search" type="text" placeholder="Search" :value="search" @input="$emit('update:search', $event.target.value)">
+      <input class="search" type="text" placeholder="Search" v-model="search" @input="emitSearch">
     </div>
   </header>
 </template>
 
 <script>
+  import { EventBus } from './../utils';
+
   export default {
     name: "Header",
-    props: {
-      search: String
+    data() {
+      return {
+        search: ''
+      }
     },
     methods: {
-      reloadPage(){
+      reloadPage() {
         window.location.reload()
+      },
+      emitSearch() {
+        EventBus.$emit('search', this.search);
       }
     }
   }
@@ -54,13 +61,13 @@
   .title {
     padding-top: 35px;
     text-align: left;
+    display: flex;
+    flex-direction: column;
 
     h1 {
       font-family: WorkSans-Medium, sans-serif;
       font-size: 24px;
       font-weight: 500;
-      font-style: normal;
-      font-stretch: normal;
       line-height: normal;
       letter-spacing: -0.9px;
       color: $blackish;
@@ -71,11 +78,22 @@
       font-family: WorkSans-Regular, sans-serif;
       font-size: 11px;
       font-weight: normal;
-      font-style: normal;
-      font-stretch: normal;
       line-height: normal;
       letter-spacing: -0.4px;
       color: $warm-gray;
+    }
+  }
+
+  @media (max-width: 1150px) {
+    .header-content {
+      margin: 0 30px;
+    }
+  }
+
+  @media (max-width: 640px) {
+
+    .search {
+      width: 220px;
     }
   }
 </style>

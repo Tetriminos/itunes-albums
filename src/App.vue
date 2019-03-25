@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Header :search.sync="search"></Header>
-    <AlbumList class="album-list" :number-of-albums="100" :search.sync="search"></AlbumList>
+    <Header></Header>
+    <AlbumList class="album-list" :number-of-albums="100"></AlbumList>
   </div>
 </template>
 

@@ -6,28 +6,32 @@
         <p class="title">{{ album.name }}</p>
         <p class="artist">{{ album.artist.name.toUpperCase() }}</p>
       </div>
-      <div class="filler"></div>
       <div class="featured-badge">
-        <p v-if="featured" class="is-featured" @click.stop="removeFromFeatured">FEATURED</p>
-        <p v-if="!featured" class="not-featured" @click.stop="addToFeatured">Add to featured</p>
+        <p :class="{ 'is-featured': featured, 'not-featured': !featured }" @click.stop="toggleFeatured">{{ featured ? 'FEATURED' : 'Add to featured' }}</p>
       </div>
 
-      <AlbumModal
+      <Modal
           v-if="isAlbumModalVisible"
-          @close="closeAlbumModal"
-          :album="album"
-          :featured="featured"
-      />
+          @close="closeAlbumModal">
+          <AlbumModal
+            :album="album"
+            :featured="featured"
+          />
+      </Modal>
     </div>
   </div>
 </template>
 
 <script>
+  import Modal from './../Modal/Modal';
   import AlbumModal from './AlbumModal';
+
+  import { EventBus } from './../../utils';
 
   export default {
     name: "Album",
     components: {
+      Modal,
       AlbumModal
     },
     props: {
@@ -46,6 +50,12 @@
       closeAlbumModal() {
         this.isAlbumModalVisible = false;
       },
+      /**
+       * Checks if current album is on the featured list.
+       * Uses local storage
+       * albums are stored as key value pairs of id's and stringified booleans
+       * @returns {boolean} - true if album is on the featured list
+       */
       isFeatured: function () {
         const isFeatured = localStorage.getItem(this.album.id);
         if (isFeatured === null || isFeatured === undefined) {
@@ -55,6 +65,13 @@
 
         return isFeatured === 'true';
       },
+      toggleFeatured() {
+        if (this.featured === true) {
+          this.removeFromFeatured();
+        } else {
+          this.addToFeatured();
+        }
+      },
       addToFeatured() {
         localStorage.setItem(this.album.id, 'true');
         this.featured = true;
@@ -62,6 +79,7 @@
       removeFromFeatured() {
         localStorage.removeItem(this.album.id);
         this.featured = false;
+        EventBus.$emit('removedFromFavorites', this.album.id);
       }
     }
   }
@@ -69,7 +87,8 @@
 
 <style scoped lang="scss">
   .card {
-    max-width: 1080px;
+    /*max-width: 1080px;*/
+    width: 100%;
     height: 90px;
     box-shadow: 0 1px 3px 0 $shadow;
     background-color: #ffffff;
@@ -94,6 +113,7 @@
   .container {
     padding: 22px 0 24px 4px;
     text-align: left;
+    flex-grow: 1;
   }
 
   .title {
@@ -101,11 +121,12 @@
     font-family: WorkSans-Medium, sans-serif;
     font-size: 18px;
     font-weight: 500;
-    font-style: normal;
-    font-stretch: normal;
     line-height: 1.33;
     letter-spacing: -0.7px;
     color: $blackish;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .artist {
@@ -113,21 +134,15 @@
     font-family: WorkSans-Regular, sans-serif;
     font-size: 12px;
     font-weight: normal;
-    font-style: normal;
-    font-stretch: normal;
     line-height: normal;
     letter-spacing: -0.4px;
     color: $blackish-47-percent;
     padding-top: 6px;
   }
 
-  .filler {
-    flex-grow: 1
-  }
-
   .featured-badge {
     margin: 32px 21px 33px 0;
-    /*padding: 7px 0;*/
+    flex-shrink: 0;
 
     .is-featured {
       width: 83px;
@@ -137,8 +152,6 @@
       font-family: WorkSans-Bold, sans-serif;
       font-size: 10px;
       font-weight: bold;
-      font-style: normal;
-      font-stretch: normal;
       line-height: normal;
       letter-spacing: normal;
       color: white;
@@ -159,8 +172,6 @@
       font-family: WorkSans-Regular, sans-serif;
       font-size: 10px;
       font-weight: normal;
-      font-style: normal;
-      font-stretch: normal;
       line-height: normal;
       text-decoration: underline;
       letter-spacing: normal;
