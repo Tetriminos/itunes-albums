@@ -28,6 +28,12 @@ npm run build
 * JS Framework (e.g. Vue, React, etc.) - _optional_
 * Commit history - _optional_
 
+# Known bugs
+* Cannot load songs for all albums because the lookup API doesn't have CORS enabled
+* If there is a search term written in the search bar, and you click 'All' or 'Featured' the albums are no longer filtered according to it
+
 # Improvements
 * Use Vuex to not pass properties around wildly (e.g. search)
 * Lazy load higher resolution images
+* TypeScript for that typed goodness
+* Use some 3rd party API for more album info (or pay Apple $99)

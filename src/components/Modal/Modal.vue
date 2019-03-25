@@ -58,9 +58,9 @@
     margin: 0 auto;
     position: relative;
     overflow: auto;
-    top: 200px;
+    top: 150px;
     max-width: 790px;
-    max-height: 600px;
+    max-height: 800px;
     background-color: white;
     border-radius: 4px;
     box-shadow: 0 1px 20px 0 $grayish-brown-60-percent;

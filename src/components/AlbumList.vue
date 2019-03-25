@@ -16,16 +16,12 @@
 <script>
   import Album from './Album/Album.vue';
 
-  import itunesdata from './../assets/itunesdata.json';
   import { mapAlbumData, EventBus } from './../utils';
 
   export default {
     name: "AlbumList",
     components: {
       Album
-    },
-    props: {
-      numberOfAlbums: Number
     },
     data() {
       return {
@@ -41,8 +37,12 @@
           .filter(this.matchesSearchTerm(search))
           .filter(this.isFeatured);
       },
-      filterFeatured: function () {
-        this.filteredAlbums = this.filteredAlbums.filter(this.isFeatured);
+      filterFeatured: function (filter) {
+        if (filter) {
+          this.filteredAlbums = this.filteredAlbums.filter(this.isFeatured);
+        } else {
+          this.filteredAlbums = JSON.parse(JSON.stringify(this.albums));
+        }
       }
     },
     mounted() {
@@ -63,8 +63,10 @@
       });
     },
     methods: {
-      fetchAlbums() {
-        this.albums = mapAlbumData(itunesdata);
+      async fetchAlbums() {
+        const albumResponse = await fetch('https://itunes.apple.com/us/rss/topalbums/limit=100/json');
+        const albumData = await albumResponse.json();
+        this.albums = mapAlbumData(albumData);
         this.filteredAlbums = JSON.parse(JSON.stringify(this.albums))
       },
       toggleFilterFeatured() {

@@ -33,3 +33,33 @@ export const mapAlbumData = data => {
     };
   });
 };
+
+export const mapSongData = data => {
+  const TRACK_TYPE = 'track';
+  
+  if (!data) {
+    throw new Error('No data');
+  }
+  
+  if (!data.results || data.results.length === 0) {
+    throw new Error('No results data');
+  }
+  
+  return data.results.filter(result => {
+    return result.wrapperType === TRACK_TYPE;
+  }).map(track => {
+    return {
+      id: track.trackId,
+      name: track.trackName,
+      url: track.trackViewUrl,
+      previewUrl: track.previewUrl,
+      time: millisToMinutesAndSeconds(track.trackTimeMillis)
+    }
+  });
+};
+
+const millisToMinutesAndSeconds = millis => {
+  const minutes = Math.floor(millis / 60000);
+  const seconds = ((millis % 60000) / 1000).toFixed(0);
+  return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+};

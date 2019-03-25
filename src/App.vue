@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header></Header>
-    <AlbumList class="album-list" :number-of-albums="100"></AlbumList>
+    <AlbumList class="album-list"></AlbumList>
   </div>
 </template>
 

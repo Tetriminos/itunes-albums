@@ -87,14 +87,12 @@
 
 <style scoped lang="scss">
   .card {
-    /*max-width: 1080px;*/
     width: 100%;
     height: 90px;
     box-shadow: 0 1px 3px 0 $shadow;
     background-color: #ffffff;
     display: flex;
     align-items: left;
-    cursor: pointer;
   }
 
   /* On mouse-over, add a deeper shadow */
@@ -118,6 +116,7 @@
 
   .title {
     height: 24px;
+    max-width: 700px;
     font-family: WorkSans-Medium, sans-serif;
     font-size: 18px;
     font-weight: 500;
@@ -182,6 +181,30 @@
       &:hover{
         color: $grayish-brown;
       }
+    }
+  }
+
+  @media (max-width: 1000px) {
+    .title {
+      max-width: 600px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .title {
+      max-width: 500px;
+    }
+  }
+
+  @media (max-width: 800px) {
+    .title {
+      max-width: 400px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .title {
+      max-width: 300px;
     }
   }
 </style>

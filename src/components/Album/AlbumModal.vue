@@ -7,10 +7,14 @@
         <img :src="album.images.huge" alt="Album cover">
         <div class="featured-badge" v-if="featured">FEATURED</div>
       </div>
-      <div class="description">
-        <p class="desc-title">SONG LIST:</p>
+      <div class="song-list">
+        <p class="song-list-title">SONG LIST:</p>
         <div v-for="song in songList" v-bind:key="song.id">
-
+          <div class="song">
+            <p class="song-name" @click="openUrlInNewTab(song.url)">{{ song.name }}</p>
+            <p class="song-time">{{ song.time }}</p>
+            <!--<button class="song-play" @click="playSong(song.previewUrl)">></button>-->
+          </div>
         </div>
       </div>
     </div>
@@ -18,6 +22,8 @@
 </template>
 
 <script>
+  import { mapSongData } from './../../utils';
+
   export default {
     name: 'AlbumModal',
     props: {
@@ -36,7 +42,16 @@
         }
 
         window.open(url);
+      },
+      async fetchSongs() {
+        // shi*tily documented Apple lookup API (from which we get the song list)
+        const songResponse = await fetch(`https://itunes.apple.com/lookup?id=${this.album.id}&entity=song`);
+        const songData = await songResponse.json();
+        this.songList = mapSongData(songData);
       }
+    },
+    mounted() {
+      this.fetchSongs();
     }
   };
 </script>
@@ -112,10 +127,10 @@
       padding: 7px 0;
     }
 
-    .description {
+    .song-list {
       font-family: WorkSans-Regular, sans-serif;
 
-      .desc-title {
+      .song-list-title {
         margin-bottom: 10px;
         font-size: 12px;
         font-weight: normal;
@@ -124,22 +139,24 @@
         color: $grayish;
       }
 
-      .desc-content {
-        margin-bottom: 10px;
-        white-space: pre-wrap;
-        font-size: 16px;
-        font-weight: normal;
-        line-height: 1.5;
-        letter-spacing: -0.6px;
+      .song {
+        margin: 4px auto;
+        display: flex;
+        flex-direction: row;
+        width: 400px;
         color: $grayish-brown;
-      }
 
-      .read-more {
-        color: $aqua;
-        cursor: pointer;
+        .song-name {
+          flex-grow: 1;
+          max-width: 360px;
+          text-wrap: none;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          cursor: pointer;
 
-        &:hover {
-          color: $grayish-brown;
+          &:hover {
+            color: $turquoise-blue;
+          }
         }
       }
     }
@@ -157,4 +174,38 @@
       }
     }
   }
+
+  @media (max-width: 690px) {
+    .album-info {
+      .song-list {
+        .song {
+          width: 350px;
+        }
+        .song-name {
+          max-width: 220px;
+          text-wrap: none;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  @media (max-width: 600px) {
+    .album-info {
+      .song-list {
+        .song {
+          max-width: 250px;
+        }
+        .song-name {
+          max-width: 220px;
+          text-wrap: none;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
 </style>
