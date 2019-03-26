@@ -1,6 +1,7 @@
 # bornfight-itunes
 
-Show top albums from iTunes
+Show top albums from iTunes.
+Check it out on [heroku](http://bornfight-itunes.herokuapp.com) (it's using free dynos, so you might have to wait for it to boot up/refresh the page).
 
 ## Project setup
 ```
