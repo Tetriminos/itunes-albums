@@ -91,9 +91,22 @@
   }
 
   @media (max-width: 640px) {
-
+    .header-content {
+      margin: 0 10px;
+    }
     .search {
       width: 220px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .title {
+      padding-top: 5px;
+    }
+
+    .search {
+      width: 70%;
+      margin-top: 30px;
     }
   }
 </style>

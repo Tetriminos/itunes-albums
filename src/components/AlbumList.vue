@@ -122,4 +122,15 @@
       margin: 0 30px;
     }
   }
+
+  @media (max-width: 600px) {
+    .albums {
+      margin: 0 10px;
+    }
+
+    .filters {
+      margin-top: 15px;
+      margin-bottom: 10px;
+    }
+  }
 </style>

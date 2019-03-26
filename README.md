@@ -1,6 +1,6 @@
 # bornfight-itunes
 
-Show top albums from iTunes 
+Show top albums from iTunes
 
 ## Project setup
 ```
@@ -9,8 +9,10 @@ npm install
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+1st terminal: $ npm run serve
+2nd terminal: $ nodemon server
 ```
+so we have access to the Apple lookup API proxy hosted in the server.js
 
 ### Compiles and minifies for production
 ```
@@ -29,11 +31,18 @@ npm run build
 * Commit history - _optional_
 
 # Known bugs
-* Cannot load songs for all albums because the lookup API doesn't have CORS enabled
-* If there is a search term written in the search bar, and you click 'All' or 'Featured' the albums are no longer filtered according to it
+* If there is a search term written in the search bar, and you click 'All' or 'Featured'
+the albums are no longer filtered according to it
 
 # Improvements
 * Use Vuex to not pass properties around wildly (e.g. search)
 * Lazy load higher resolution images
 * TypeScript for that typed goodness
-* Use some 3rd party API for more album info (or pay Apple $99)
+* Use some 3rd party API for more album info (or pay Apple $99 for a developer account)
+
+# Notes
+* The nasty proxy related hacky stuff in the AlbumModal (for the song list) and the server.js
+that circumvents the Apple lookup API not handling CORS is something I would never do in a
+professional setting. I would either ask the API provider to handle CORS, or if that is not
+an option, I would host a proxy elsewhere (not coupled to the client for frick's sake).
+I just wanted song info :c

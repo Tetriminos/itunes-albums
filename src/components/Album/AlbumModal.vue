@@ -44,8 +44,13 @@
         window.open(url);
       },
       async fetchSongs() {
-        // shi*tily documented Apple lookup API (from which we get the song list)
-        const songResponse = await fetch(`https://itunes.apple.com/lookup?id=${this.album.id}&entity=song`);
+        // we use our own CORS handling proxy over the Apple lookup API
+        let currentURL = window.location.href;
+        // if we're developing, we want the app to use the proxy hosted at port 3000
+        if (currentURL.includes(':8080')) {
+          currentURL = 'http://localhost:3000/';
+        }
+        const songResponse = await fetch(`${currentURL}proxy/songs/${this.album.id}`);
         const songData = await songResponse.json();
         this.songList = mapSongData(songData);
       }
@@ -208,4 +213,26 @@
     }
   }
 
+  @media (max-width: 530px) {
+    .modal-content {
+      width: 80%;
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+
+    .album-info {
+      flex-direction: column;
+      align-items: center;
+      /*width: 80%;*/
+      img {
+        height: 249px;
+        width: 249px;
+        margin-right: 0;
+        margin-bottom: 7px;
+      }
+      .featured-badge {
+        top: 210px;
+      }
+    }
+  }
 </style>

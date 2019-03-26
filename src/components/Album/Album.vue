@@ -92,6 +92,7 @@
     box-shadow: 0 1px 3px 0 $shadow;
     background-color: #ffffff;
     display: flex;
+    flex-wrap: wrap;
     align-items: left;
   }
 
@@ -205,6 +206,50 @@
   @media (max-width: 700px) {
     .title {
       max-width: 300px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .title {
+      max-width: 250px;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .title {
+      max-width: 200px;
+    }
+  }
+
+  @media (max-width: 450px) {
+    .card {
+      height: 120px;
+    }
+
+    .container {
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    .title {
+      max-width: 220px;
+    }
+
+    .artist {
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    .featured-badge {
+      width: 60%;
+      margin: -15px 0 0 95px;
+      padding: 0;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .title {
+      max-width: 150px;
     }
   }
 </style>
